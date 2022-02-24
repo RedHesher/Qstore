@@ -1,0 +1,37 @@
+﻿@model Qstore.ViewModels.ProductViewModel
+
+@{
+    ViewBag.Title = "Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Product</title>
+</head>
+    <body>
+        <div>
+            <img src=@Model.product.ImagePath height="400" />
+            <ul>
+                <li>@Model.product.Name</li>
+                <li>@Model.product.Price</li>
+                <li>@Model.product.Category</li>
+            </ul>
+
+
+            @using (Html.BeginForm("Buy", "Account"))
+            {
+                <div class="form-group">
+                    <div class="form-group">
+                        @Html.EditorFor(model => model.quantity)
+                    </div>
+                </div>
+                <input type="submit" value="Buy" />
+            }
+
+
+            <p>@Model.product.Description</p>
+        </div>
+    </body>
+</html>

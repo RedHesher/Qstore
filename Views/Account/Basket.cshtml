@@ -1,0 +1,48 @@
+﻿@model Qstore.ViewModels.BasketViewModel
+
+@{
+    ViewBag.Title = "Basket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Basket</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @if (Model.Orders == null)
+        {
+            <dd> No Orders so far </dd>
+        }
+        else
+        {
+            foreach (var order in Model.Orders)
+            {
+                if (!order.IsClosed)
+                {
+                    <div class="btn-default">
+                        @Html.ActionLink("Purchaise", "Purchaise", "Account")
+                    </div>
+                    <div class="btn-default">
+                        @Html.ActionLink("Remove Order", "RemoveOrder", "Account")
+                    </div>
+                }
+                else
+                {
+                    <dt>@order.OrderDate</dt>
+                }
+
+                foreach (var product_order in order.Product_Order)
+                {
+                    if (order.Id == product_order.OrderId)
+                    {
+                        <dd>@Model.Products.SingleOrDefault(p => p.Id == product_order.ProductId).Name</dd>
+                        <dd>@Model.Products.SingleOrDefault(p => p.Id == product_order.ProductId).Price</dd>
+                        <dd>@Model.Products.SingleOrDefault(p => p.Id == product_order.ProductId).Category.ToString()</dd>
+                    }
+                }
+                <dt></dt>
+            }
+        }
+    </dl>
+</div>
