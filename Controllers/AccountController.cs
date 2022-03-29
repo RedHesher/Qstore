@@ -97,14 +97,14 @@ namespace Qstore.Controllers
         }
         /// /////////////////////////////////////////////////////////////////////////////
 
-
-
-        public ActionResult Buy(ProductViewModel model)
+        [HttpPost]
+        public ActionResult Product(ProductViewModel model)
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             //currentUser.Orders.Last().addProducts(model) // ApplicationUser custom methods ??? 
 
             Order lastOrder;
+            model.product = _context.Products.SingleOrDefault(c => c.Id == model.product.Id); // how do that right?
 
             if (currentUser.Orders == null)
             {
@@ -124,18 +124,10 @@ namespace Qstore.Controllers
                 lastOrder = currentUser.Orders.Last();
             }
 
-            /*
-            понимаю "гениальность" своего мышления с использованием
-            many to many (Product_Order), но я не знаю как без изменения таблици Products
-            использовать one to many как с заказами.
-            Еще решительно не понимаю почему далее написанное не сохраняет Product_Order в базу, 
-            а точнее как через 2 вьюшки (product[get], product[post]) пронести одну модель (ProductViewModel)
-             */
-
             for (int i = 0; i < model.quantity; i++)
             {
                 Product_Order product_Order = new Product_Order();
-                product_Order.ProductId = model.product.Id;
+                product_Order.ProductId = model.product.Id; //X
                 product_Order.OrderId = lastOrder.Id;
                 _context.Product_Orders.Add(product_Order);
             }

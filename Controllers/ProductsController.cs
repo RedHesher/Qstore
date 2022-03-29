@@ -33,9 +33,11 @@ namespace Qstore.Controllers
         }
 
         //Products/Id
+        [HttpGet]
         public ActionResult Product(int id)
         {
             ProductViewModel model = new ProductViewModel();
+            model.quantity = 0;
             model.product = _context.Products.SingleOrDefault(c => c.Id == id);
 
             if (model.product == null)

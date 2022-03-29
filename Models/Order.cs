@@ -26,20 +26,5 @@ namespace Qstore.Models
             OrderDate = DateTime.Today;
             IsClosed = true;
         }
-
-        //public void addProducts(Order lastOrder)
-        //{
-        //    if (!currentUser.Orders.Last().IsClosed) // ApplicationUser custom methods???
-        //    {
-        //        lastOrder = currentUser.Orders.Last();
-        //    }
-        //    else
-        //    {
-        //        lastOrder = new Order();
-        //    }
-
-        //    for (int i = 0; i < quantity; i++)
-        //        lastOrder.Products.Add(product);
-        //}
     }
 }
