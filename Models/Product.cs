@@ -22,6 +22,6 @@ namespace Qstore.Models
         public string ImagePath { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<Product_Order> Product_Order { get; set; }
+        public virtual ICollection<Product_Order> Product_Orders { get; set; }
     }
 }

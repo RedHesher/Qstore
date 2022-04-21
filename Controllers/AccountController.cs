@@ -100,42 +100,21 @@ namespace Qstore.Controllers
         [HttpPost]
         public ActionResult Product(ProductViewModel model)
         {
-            var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            //currentUser.Orders.Last().addProducts(model) // ApplicationUser custom methods ??? 
+            //currentUser.Orders.Last().addProducts(model) // is there ApplicationUser custom methods ??? 
 
-            Order lastOrder;
-            model.product = _context.Products.SingleOrDefault(c => c.Id == model.product.Id); // how do that right?
-
-            if (currentUser.Orders == null)
+            Order lastOrder = new Order(UserManager.FindById(User.Identity.GetUserId()));
+            
+            if(ModelState.IsValid)
             {
-                currentUser.Orders = new List<Order>();
-            }
+                lastOrder.Add(model.product, model.quantity);
 
-
-            if (currentUser.Orders.Count == 0 || currentUser.Orders.Last().IsClosed)
-            {
-                lastOrder = new Order();
-                lastOrder.OrderDate = DateTime.Now;
-                lastOrder.Product_Order = new List<Product_Order>();
-                currentUser.Orders.Add(lastOrder);
+                _context.SaveChanges();
+                return RedirectToAction("Basket", "Account");
             }
             else
             {
-                lastOrder = currentUser.Orders.Last();
+                return View("Error");
             }
-
-            for (int i = 0; i < model.quantity; i++)
-            {
-                Product_Order product_Order = new Product_Order();
-                product_Order.ProductId = model.product.Id; //X
-                product_Order.OrderId = lastOrder.Id;
-                _context.Product_Orders.Add(product_Order);
-            }
-
-
-            UserManager.SetEmail(currentUser.Id, currentUser.Email);
-            _context.SaveChanges();
-            return RedirectToAction("Basket", "Account");
         }
 
         [HttpPost]
@@ -144,7 +123,7 @@ namespace Qstore.Controllers
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             currentUser.Orders.Last().confirmOrder();
 
-            //UserManager.SetEmail(currentUser.Id, currentUser.Email);
+            //UserManager.SetEmail(currentUser.Id, currentUser.Email); // not necesarry?
             return RedirectToAction("Basket");
         }
 
@@ -152,9 +131,9 @@ namespace Qstore.Controllers
         public ActionResult RemoveOrder()
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            currentUser.Orders.Last().Product_Order = null;
+            currentUser.Orders.Last().Product_Orders = null;
 
-            //UserManager.SetEmail(currentUser.Id, currentUser.Email);
+            //UserManager.SetEmail(currentUser.Id, currentUser.Email); // not necesarry?
             return RedirectToAction("Basket");
         }
 

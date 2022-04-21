@@ -16,10 +16,34 @@ namespace Qstore.Models
         [Required]
         public bool IsClosed { get; set; }
 
-        public virtual ICollection<Product_Order> Product_Order { get; set; }
+        public virtual ICollection<Product_Order> Product_Orders { get; set; }
 
-        public int ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+
+        public Order(ApplicationUser currentUser)
+        {
+            this.ApplicationUserId = currentUser.Id;
+            this.ApplicationUser = currentUser;
+            this.Id = currentUser.Orders.Count;
+            this.OrderDate = DateTime.Now;
+            this.IsClosed = false;
+        }
+
+        public void Add(Product product, int quantity)
+        {
+            Product_Orders.Add(new Product_Order
+            {
+                Id = Product_Orders.Count,
+                Quantity = quantity,
+                ProductId = product.Id,
+                OrderId = this.Id,
+                Product = product,
+                Order = this
+            });
+
+            ApplicationUser.Orders.Add(this);//?
+        }
 
         public void confirmOrder()
         {

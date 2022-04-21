@@ -24,7 +24,7 @@
             {
                 <div class="form-group">
                     <div class="form-group">
-                        @Html.HiddenFor(model => model.product.Id)
+                        @Html.HiddenFor(model => model.product)
                         @Html.EditorFor(model => model.quantity, new { htmlAttributes = new { @type = "number", @min = "0" } })
                     </div>
                 </div>
